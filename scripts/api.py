@@ -2,9 +2,11 @@ from fastapi import FastAPI, Body
 
 from modules.api.models import *
 from modules.api import api
+from modules.paths_internal import models_path
 import gradio as gr
 
 import rembg
+import os
 
 # models = [
 #     "None",
@@ -29,6 +31,9 @@ def rembg_api(_: gr.Blocks, app: FastAPI):
     ):
         if not model or model == "None":
             return
+
+        if "U2NET_HOME" not in os.environ:
+            os.environ["U2NET_HOME"] = os.path.join(models_path, "u2net")
 
         input_image = api.decode_base64_to_image(input_image)
 
